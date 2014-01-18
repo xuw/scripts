@@ -4,7 +4,7 @@ require 'open3'
 report = {}
 threads = []
 
-1.upto 10 do |cnt|
+1.upto 20 do |cnt|
 1.upto 12 do |num| 
   t = Thread.new do
     ip = "10.0.3.#{num}"
