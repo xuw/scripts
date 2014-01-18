@@ -15,10 +15,14 @@ option_parser = OptionParser.new do |opts|
   opts.on('-f fn', '--host_file filename', 'file of a list of hosts') do |file|
     options[:file] = file
   end
+  opts.on('-p port', '--port port', 'port number') do |port|
+    options[:port] = port
+  end
 end.parse!
 
 p options
 
+port = 23
 ips = []
 if options[:file]
   ips = IO.readlines(options[:file])
@@ -26,13 +30,17 @@ end
 if options[:hosts]
   ips = options[:hosts]
 end
+if options[:port]
+  port = options[:port]
+end
+
 failures = []
 
 ips.each do |host| 
   begin 
     puts "running on ======== #{host} ========"
     puts
-    telnet = Net::Telnet.new("Host" => host) {|c| print c}
+    telnet = Net::Telnet.new("Host" => host, "Port" => port) {|c| print c}
     telnet.login("admin", "pica8") {|c| print c}
      
     yield telnet, host

@@ -1,27 +1,27 @@
-#cmd = "power on"
-#cmd = "chassis bootdev bios"
-cmd = "sensor"
+cmd = "chassis identify 2"
 username = "admin"
 passwd = "admin"
-sleeptime = 0.5 
+sleeptime = 1 
 
 require 'open3'
 report = {}
 threads = []
-2.upto 45 do |num| 
+1.upto 182 do |num| 
   t = Thread.new do
     ip = "10.0.0.#{num}"
     command = "ipmitool -I lanplus -H #{ip} -U #{username} -P #{passwd} #{cmd}"
-    result = `#{command}`
-    status = $?.to_i
-    report[num] = [ip, status, result]
-    puts "#{ip}: (#{status})  #{result}"
+    Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+      #status = $?.to_i
+      status = wait_thr.value
+      report[num] = [ip, status, stdout.readlines, stderr.readlines]
+      puts "#{ip}: (#{status})  #{stdout}"
+    end
   end
   threads << t
   sleep(sleeptime)
 end
 threads.each do |t|
-  puts "wating" until t.join(120)
+  puts "wating for slow process.... " until t.join(30)
 end
 
 puts "Failed On Nodes:"
