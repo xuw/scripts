@@ -1,7 +1,7 @@
-#cmd = "power off"
+cmd = "power on"
 #cmd = "chassis bootdev bios"
 #cmd = "sensor"
-cmd = "bmc watchdog get"
+#cmd = "bmc watchdog get"
 username = "admin"
 passwd = "admin"
 sleeptime = 0.1 
