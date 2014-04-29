@@ -1,4 +1,5 @@
 cmd = "power on"
+#cmd = "power off"
 #cmd = "chassis bootdev bios"
 #cmd = "sensor"
 #cmd = "bmc watchdog get"
@@ -9,7 +10,10 @@ sleeptime = 0.1
 require 'open3'
 report = {}
 threads = []
-1.upto 180 do |num| 
+all_nodes = (1..180).to_a
+all_nodes += (202..208).to_a
+
+all_nodes.each do |num| 
   t = Thread.new do
     ip = "10.0.0.#{num}"
     command = "ipmitool -I lanplus -H #{ip} -U #{username} -P #{passwd} #{cmd}"
